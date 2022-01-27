@@ -6,6 +6,8 @@ import gql from 'graphql-tag'
 import { getBlocksFromTimestamps } from 'hooks/useBlocksFromTimestamps'
 import { PriceChartEntry } from 'types'
 
+const CURRENT_TIMESTAMP = process.env.REACT_APP_CURRENT_TIMESTAMP
+
 // format dayjs with the libraries that we need
 dayjs.extend(utc)
 dayjs.extend(weekOfYear)
@@ -14,7 +16,7 @@ export const PRICES_BY_BLOCK = (tokenAddress: string, blocks: any) => {
   let queryString = 'query blocks {'
   queryString += blocks.map(
     (block: any) => `
-      t${block.timestamp}:token(id:"${tokenAddress}", block: { number: ${block.number} }, subgraphError: allow) { 
+      t${block.timestamp}:token(id:"${tokenAddress}", block: { number: ${block.number} }, subgraphError: allow) {
         derivedETH
       }
     `
@@ -22,7 +24,7 @@ export const PRICES_BY_BLOCK = (tokenAddress: string, blocks: any) => {
   queryString += ','
   queryString += blocks.map(
     (block: any) => `
-      b${block.timestamp}: bundle(id:"1", block: { number: ${block.number} }, subgraphError: allow) { 
+      b${block.timestamp}: bundle(id:"1", block: { number: ${block.number} }, subgraphError: allow) {
         ethPriceUSD
       }
     `
@@ -73,7 +75,7 @@ export async function fetchTokenPriceData(
   // start and end bounds
 
   try {
-    const endTimestamp = dayjs.utc().unix()
+    const endTimestamp = dayjs(Number(CURRENT_TIMESTAMP)).utc().unix()
 
     if (!startTimestamp) {
       console.log('Error constructing price start timestamp')
