@@ -23,6 +23,8 @@ import { useActiveNetworkVersion, useClients } from 'state/application/hooks'
 // format dayjs with the libraries that we need
 dayjs.extend(utc)
 
+const CURRENT_TIMESTAMP = process.env.REACT_APP_CURRENT_TIMESTAMP
+
 export function useAllTokenData(): {
   [address: string]: { data: TokenData | undefined; lastUpdated: number | undefined }
 } {
@@ -177,7 +179,7 @@ export function useTokenPriceData(
 
   // construct timestamps and check if we need to fetch more data
   const oldestTimestampFetched = token.priceData.oldestFetchedTimestamp
-  const utcCurrentTime = dayjs()
+  const utcCurrentTime = dayjs(Number(CURRENT_TIMESTAMP))
   const startTimestamp = utcCurrentTime.subtract(1, timeWindow).startOf('hour').unix()
 
   useEffect(() => {

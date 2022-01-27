@@ -12,6 +12,8 @@ import { ROUTER_ADDRESS } from '../constants'
 import { TokenAddressMap } from '../state/lists/hooks'
 import { OptimismNetworkInfo } from './../constants/networks'
 
+const CURRENT_TIMESTAMP = process.env.REACT_APP_CURRENT_TIMESTAMP
+
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
   try {
@@ -97,7 +99,7 @@ export function getEtherscanLink(
   }
 }
 
-export const currentTimestamp = () => new Date().getTime()
+export const currentTimestamp = () => new Date(Number(CURRENT_TIMESTAMP)).getTime()
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
 export function shortenAddress(address: string, chars = 4): string {
