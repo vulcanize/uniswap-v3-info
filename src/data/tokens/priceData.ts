@@ -5,8 +5,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import gql from 'graphql-tag'
 import { getBlocksFromTimestamps } from 'hooks/useBlocksFromTimestamps'
 import { PriceChartEntry } from 'types'
-
-const CURRENT_TIMESTAMP = process.env.REACT_APP_CURRENT_TIMESTAMP
+import { getCurrentTimestamp } from 'utils'
 
 // format dayjs with the libraries that we need
 dayjs.extend(utc)
@@ -75,7 +74,8 @@ export async function fetchTokenPriceData(
   // start and end bounds
 
   try {
-    const endTimestamp = dayjs(Number(CURRENT_TIMESTAMP)).utc().unix()
+    const currentTimestamp = await getCurrentTimestamp()
+    const endTimestamp = dayjs(currentTimestamp).utc().unix()
 
     if (!startTimestamp) {
       console.log('Error constructing price start timestamp')
